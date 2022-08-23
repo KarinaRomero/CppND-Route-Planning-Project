@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
+#include <limits> 
 #include "route_model.h"
 #include "render.h"
 #include "route_planner.h"
@@ -25,6 +26,20 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
     if( contents.empty() )
         return std::nullopt;
     return std::move(contents);
+}
+
+static void ValidateInput(float &value, std::string description_value) {
+    while (true)
+    {
+        std::cout << "Enter the value for " << description_value << ": " << "\n";
+        if(std::cin >> value && value >= 0 && value <= 100) {
+            return;
+        } else {
+            std::cout << "Enter a valid float value, all values should be [from: 0 To: 100]\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 }
 
 int main(int argc, const char **argv)
@@ -56,11 +71,18 @@ int main(int argc, const char **argv)
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
 
+    float start_x, start_y, end_x, end_y;
+    
+    ValidateInput(start_x, "start in X");
+    ValidateInput(start_y, "start in Y");
+    ValidateInput(end_x, "goal in X");
+    ValidateInput(end_y, "goal in Y");
+
     // Build Model.
     RouteModel model{osm_data};
 
     // Create RoutePlanner object and perform A* search.
-    RoutePlanner route_planner{model, 10, 10, 90, 90};
+    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
     route_planner.AStarSearch();
 
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
