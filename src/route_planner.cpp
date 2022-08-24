@@ -62,9 +62,7 @@ RouteModel::Node *RoutePlanner::NextNode() {
 }
 
 bool RoutePlanner::CompareHPlusGValue(RouteModel::Node *node1, RouteModel::Node *node2) {
-    float sum_hg_1 = node1->h_value + node1->g_value;
-    float sum_hg_2 = node2->h_value + node2->g_value;
-    return (sum_hg_1 > sum_hg_2);
+    return node1->h_value + node1->g_value > node2->h_value + node2->g_value;
 }
 
 // TODO 6: Complete the ConstructFinalPath method to return the final path found from your A* search.
