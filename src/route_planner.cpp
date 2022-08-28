@@ -107,22 +107,16 @@ void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = start_node;
     current_node->h_value = CalculateHValue(start_node);
     current_node->visited = true;
+    open_list.emplace_back(current_node);
     
-    AddNeighbors(current_node);
     // TODO: Implement your solution here.
-    while (open_list.size() > 0)
-   // while(current_node != end_node)
+    while (!open_list.empty())
     {
         current_node = NextNode();
         AddNeighbors(current_node);
-
         if(current_node->x  == end_node->x && current_node->y  == end_node->y) {
             m_Model.path = ConstructFinalPath(current_node);
             break;
         }
-        
     }
-
-    //m_Model.path = ConstructFinalPath(current_node);
-    
 }
